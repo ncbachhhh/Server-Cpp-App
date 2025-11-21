@@ -1,0 +1,98 @@
+# depslib dependency file v1.0
+1740933562 source:d:\webapp\ltudm\http_server\main.cpp
+	<iostream>
+
+1648535401 source:d:\webapp\ltudm\http_server\cli.cpp
+	<iostream>
+	<sstream>
+	"cli.h"
+
+1647603059 d:\webapp\ltudm\http_server\cli.h
+	<string>
+
+1650541218 source:d:\webapp\ltudm\http_server\serverconfig.cpp
+	<cstring>
+	<iostream>
+	"serverconfig.h"
+
+1650538096 d:\webapp\ltudm\http_server\serverconfig.h
+	<string>
+	<unordered_map>
+
+1650541001 source:d:\webapp\ltudm\http_server\session.cpp
+	"session.h"
+
+1650540999 d:\webapp\ltudm\http_server\session.h
+	"tcpsocket.h"
+	"serverconfig.h"
+
+1648537735 d:\webapp\ltudm\http_server\tcpsocket.h
+	"socket.h"
+
+1647662317 d:\webapp\ltudm\http_server\socket.h
+	<string>
+	<exception>
+
+1647662320 source:d:\webapp\ltudm\http_server\socket.cpp
+	"socket.h"
+	<winsock2.h>
+	<ws2tcpip.h>
+	<sys/types.h>
+	<sys/socket.h>
+	<netdb.h>
+	<arpa/inet.h>
+	<unistd.h>
+	<netinet/in.h>
+	<cstring>
+	<errno.h>
+
+1650550071 source:d:\webapp\ltudm\http_server\tcpserver.cpp
+	<thread>
+	<thread>
+	<iostream>
+	"tcpserver.h"
+
+1763726142 d:\webapp\ltudm\http_server\tcpserver.h
+	"tcpserversocket.h"
+	"session.h"
+	<cstdint>
+
+1647322491 d:\webapp\ltudm\http_server\tcpserversocket.h
+	"tcpsocket.h"
+
+1649203954 source:d:\webapp\ltudm\http_server\tcpserversocket.cpp
+	<winsock2.h>
+	<ws2tcpip.h>
+	<sys/types.h>
+	<sys/socket.h>
+	<netdb.h>
+	<arpa/inet.h>
+	<unistd.h>
+	<netinet/in.h>
+	<errno.h>
+	"tcpserversocket.h"
+
+1650543033 source:d:\webapp\ltudm\http_server\tcpsocket.cpp
+	<winsock2.h>
+	<ws2tcpip.h>
+	<sys/types.h>
+	<sys/socket.h>
+	<netdb.h>
+	<arpa/inet.h>
+	<unistd.h>
+	<netinet/in.h>
+	<cstring>
+	<errno.h>
+	"tcpsocket.h"
+
+1763725183 source:d:\webapp\ltudm\http_server\httpserverconfig.cpp
+	"httpserverconfig.h"
+	<fstream>
+	<sstream>
+	<iostream>
+
+1763725159 d:\webapp\ltudm\http_server\httpserverconfig.h
+	"serverconfig.h"
+	<string>
+	<vector>
+

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="HTTP_Server" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Debug">
+				<Option output="bin/Debug/HTTP_Server" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Debug/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-g" />
+				</Compiler>
+			</Target>
+			<Target title="Release">
+				<Option output="bin/Release/HTTP_Server" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Release/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-O2" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+				</Linker>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-Wall" />
+			<Add option="-fexceptions" />
+		</Compiler>
+		<Unit filename="HTTP_Server.cbp" />
+		<Unit filename="HTTP_Server.depend" />
+		<Unit filename="HTTP_Server.layout" />
+		<Unit filename="cli.cpp" />
+		<Unit filename="cli.h" />
+		<Unit filename="httpserver.cpp" />
+		<Unit filename="httpserver.h" />
+		<Unit filename="httpservercli.cpp" />
+		<Unit filename="httpservercli.h" />
+		<Unit filename="httpserverconfig.cpp" />
+		<Unit filename="httpserverconfig.h" />
+		<Unit filename="main.cpp" />
+		<Unit filename="serverconfig.cpp" />
+		<Unit filename="serverconfig.h" />
+		<Unit filename="session.cpp" />
+		<Unit filename="session.h" />
+		<Unit filename="socket.cpp" />
+		<Unit filename="socket.h" />
+		<Unit filename="tcpserver.cpp" />
+		<Unit filename="tcpserver.h" />
+		<Unit filename="tcpserversocket.cpp" />
+		<Unit filename="tcpserversocket.h" />
+		<Unit filename="tcpsocket.cpp" />
+		<Unit filename="tcpsocket.h" />
+		<Extensions />
+	</Project>
+</CodeBlocks_project_file>
