@@ -1,6 +1,6 @@
 # depslib dependency file v1.0
-1740933562 source:d:\webapp\ltudm\http_server\main.cpp
-	<iostream>
+1763726096 source:d:\webapp\ltudm\http_server\main.cpp
+	"httpservercli.h"
 
 1648535401 source:d:\webapp\ltudm\http_server\cli.cpp
 	<iostream>
@@ -91,8 +91,39 @@
 	<sstream>
 	<iostream>
 
-1763725159 d:\webapp\ltudm\http_server\httpserverconfig.h
+1763991908 d:\webapp\ltudm\http_server\httpserverconfig.h
 	"serverconfig.h"
 	<string>
 	<vector>
+
+1763726089 source:d:\webapp\ltudm\http_server\httpservercli.cpp
+	"httpservercli.h"
+	<iostream>
+
+1763726083 d:\webapp\ltudm\http_server\httpservercli.h
+	"cli.h"
+	"httpserver.h"
+
+1763991908 d:\webapp\ltudm\http_server\httpserver.h
+	"tcpserver.h"
+	"httpserverconfig.h"
+	"tcpsocket.h"
+
+1763990024 source:d:\webapp\ltudm\http_server\httpsession.cpp
+	"httpsession.h"
+	<sstream>
+	<fstream>
+	<iostream>
+	<algorithm>
+
+1763986992 d:\webapp\ltudm\http_server\httpsession.h
+	"session.h"
+	"httpserverconfig.h"
+	<string>
+	<vector>
+
+1763988900 source:d:\webapp\ltudm\http_server\httpserver.cpp
+	"httpserver.h"
+	"httpsession.h"
+	<iostream>
 

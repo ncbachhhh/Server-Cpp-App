@@ -1,7 +1,7 @@
 #include "httpservercli.h"
 #include <iostream>
 
-HttpServerCLI::HttpServerCLI() : CmdLineInterface("http-server> ")
+HttpServerCLI::HttpServerCLI() : CmdLineInterface("Server> ")
 {
     server = new HttpServer();
     initCmd();
@@ -12,7 +12,6 @@ HttpServerCLI::~HttpServerCLI()
     if (server) delete server;
 }
 
-// Đăng ký các lệnh CLI
 void HttpServerCLI::initCmd()
 {
     addCmd("start",   CLI_CAST(&HttpServerCLI::doStart));
@@ -22,7 +21,7 @@ void HttpServerCLI::initCmd()
     addCmd("help",    CLI_CAST(&HttpServerCLI::doHelp));
 }
 
-// Lệnh start
+// Start
 void HttpServerCLI::doStart(string cmd_argv[], int cmd_argc)
 {
     if (server->isRunning())
@@ -37,7 +36,7 @@ void HttpServerCLI::doStart(string cmd_argv[], int cmd_argc)
         cout << "HTTP Server failed to start\n";
 }
 
-// Lệnh stop
+// Stop
 void HttpServerCLI::doStop(string cmd_argv[], int cmd_argc)
 {
     if (!server->isRunning())
@@ -50,7 +49,7 @@ void HttpServerCLI::doStop(string cmd_argv[], int cmd_argc)
     cout << "HTTP Server stopped\n";
 }
 
-// Lệnh restart
+// Restart
 void HttpServerCLI::doRestart(string cmd_argv[], int cmd_argc)
 {
     if (server->restart())
@@ -59,7 +58,7 @@ void HttpServerCLI::doRestart(string cmd_argv[], int cmd_argc)
         cout << "HTTP Server failed to restart\n";
 }
 
-// Lệnh status
+// Status
 void HttpServerCLI::doStatus(string cmd_argv[], int cmd_argc)
 {
     if (server->isRunning())
@@ -68,15 +67,15 @@ void HttpServerCLI::doStatus(string cmd_argv[], int cmd_argc)
         cout << "HTTP Server is not running\n";
 }
 
-// Lệnh help
+// Help
 void HttpServerCLI::doHelp(string cmd_argv[], int cmd_argc)
 {
     cout << "Cac lenh ho tro:\n";
-    cout << "  start    : Bat server\n";
-    cout << "  stop     : Tat server\n";
-    cout << "  restart  : Khoi dong lai server\n";
-    cout << "  status   : Xem trang thai server\n";
-    cout << "  help     : Tro giup\n";
-    cout << "  quit     : Thoat chuong trinh\n";
+    cout << "  start    : Start server\n";
+    cout << "  stop     : Stop server\n";
+    cout << "  restart  : Restart server\n";
+    cout << "  status   : Status server\n";
+    cout << "  help     : Show command\n";
+    cout << "  quit     : Exit the program\n";
 }
 

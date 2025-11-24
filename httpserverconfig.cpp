@@ -5,15 +5,16 @@
 
 HttpServerConfig::HttpServerConfig()
 {
-    port = 8080;          // giá trị mặc định
-    documentRoot = "www"; // mặc định
+    // mặc định trước khi đọc được file config
+    port = 8080;
+    documentRoot = "www";
 }
 
 HttpServerConfig::~HttpServerConfig()
 {
 }
 
-// Hàm tách danh sách phần mở rộng "html,htm,jpg"
+// parse danh sách các extention từ file
 void HttpServerConfig::parseExtensions(const string& csv)
 {
     allowedExtensions.clear();
@@ -27,13 +28,13 @@ void HttpServerConfig::parseExtensions(const string& csv)
     }
 }
 
-// Đọc file cấu hình http.conf
+// đọc file http.conf
 bool HttpServerConfig::loadConfig(const string& filename)
 {
     ifstream fin(filename);
     if (!fin.is_open())
     {
-        cerr << "Khong mo duoc file config: " << filename << endl;
+        cerr << "Can not open file config: " << filename << endl;
         return false;
     }
 

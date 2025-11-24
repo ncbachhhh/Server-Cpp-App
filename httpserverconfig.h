@@ -10,9 +10,9 @@ using namespace std;
 class HttpServerConfig : public ServerConfig
 {
 private:
-    string documentRoot;                  // thư mục gốc chứa tài nguyên
-    vector<string> allowedExtensions;     // danh sách phần mở rộng hợp lệ
-    unsigned short port;                  // cổng server
+    string documentRoot;                  // root document chứa các file
+    vector<string> allowedExtensions;
+    unsigned short port;
 
 public:
     HttpServerConfig();

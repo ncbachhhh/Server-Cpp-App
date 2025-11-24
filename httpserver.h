@@ -8,7 +8,7 @@
 class HttpServer : public TCPServer
 {
 private:
-    HttpServerConfig* httpConf;   // cấu hình của HTTP server
+    HttpServerConfig* httpConf;   // config cho server
 
 public:
     HttpServer();
@@ -17,7 +17,7 @@ public:
     bool loadConfig();            // đọc http.conf
 
 protected:
-    // bắt buộc override từ TCPServer
+    // override từ TCPServer
     virtual void startNewSession(TcpSocket slave) override;
 };
 

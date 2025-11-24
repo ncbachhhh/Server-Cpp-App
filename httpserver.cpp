@@ -1,11 +1,11 @@
 #include "httpserver.h"
+#include "httpsession.h"
 #include <iostream>
 
-HttpServer::HttpServer()
-    : TCPServer(0)     // ban đầu chưa set port, sẽ set sau khi load config
+HttpServer::HttpServer():TCPServer(0)     // set tạm port là 0, load config xong thì set lại
 {
     httpConf = new HttpServerConfig();
-    this->conf = httpConf;       // TCPServer sử dụng con trỏ conf chung
+    this->conf = httpConf;
 
     if (loadConfig())
     {
@@ -14,7 +14,7 @@ HttpServer::HttpServer()
     }
     else
     {
-        std::cout << "Failed to load http.conf. Use default port 8080\n";
+        std::cout << "Failed to load config. Use default port 8080\n";
         this->port = 8080;
     }
 }
@@ -31,16 +31,15 @@ bool HttpServer::loadConfig()
     return httpConf->loadConfig("http.conf");
 }
 
-// Mỗi slave socket → tạo 1 phiên làm việc
-// Skeleton: tạm thời chỉ đóng kết nối ngay (vì chưa code HttpSession)
+// Mỗi slave socket tạo 1 phiên làm việc
 void HttpServer::startNewSession(TcpSocket slave)
 {
-    std::cout << "[HttpServer] New connection accepted\n";
+    std::cout << "New connection accepted from " << slave.getRemoteAddress() << ":" << slave.getRemotePort() << endl;
 
-    // non-persistent → đóng ngay
     try
     {
-        slave.close();
+        HttpSession session(slave, httpConf); // tạo session mới
+        session.handleRequest(); // xử lý yêu cầu
     }
     catch (...)
     {
