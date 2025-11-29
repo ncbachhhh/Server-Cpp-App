@@ -37,12 +37,15 @@
 		<Unit filename="HTTP_Server.layout" />
 		<Unit filename="cli.cpp" />
 		<Unit filename="cli.h" />
+		<Unit filename="http.conf" />
 		<Unit filename="httpserver.cpp" />
 		<Unit filename="httpserver.h" />
 		<Unit filename="httpservercli.cpp" />
 		<Unit filename="httpservercli.h" />
 		<Unit filename="httpserverconfig.cpp" />
 		<Unit filename="httpserverconfig.h" />
+		<Unit filename="httpsession.cpp" />
+		<Unit filename="httpsession.h" />
 		<Unit filename="main.cpp" />
 		<Unit filename="serverconfig.cpp" />
 		<Unit filename="serverconfig.h" />

@@ -3,6 +3,44 @@
 #include <fstream>
 #include <iostream>
 #include <algorithm>
+#include <ctime>
+#include <iomanip>
+
+using namespace std;
+
+// ======================
+// Helper: lấy thời gian
+// ======================
+static string currentDateTime()
+{
+    time_t now = time(nullptr);
+    tm* lt = localtime(&now);
+    stringstream ss;
+    ss << put_time(lt, "%Y-%m-%d %H:%M:%S");
+    return ss.str();
+}
+
+// ======================
+// Helper: ghi access log
+// ======================
+// Format: [time] ip "METHOD URI HTTP/1.0" code length
+static void logAccess(const string& ip,
+                      const string& method,
+                      const string& uri,
+                      int code,
+                      long len)
+{
+    ofstream log("access.log", ios::app);
+    if (!log.is_open()) return;
+
+    log << "[" << currentDateTime() << "] "
+        << ip << " \"" << method << " " << uri << " HTTP/1.0\" "
+        << code << " " << len << "\n";
+}
+
+// ======================
+// HttpSession
+// ======================
 
 HttpSession::HttpSession(const TcpSocket& slave, HttpServerConfig* conf)
     : Session(slave, conf)
@@ -14,23 +52,22 @@ HttpSession::~HttpSession()
 {
 }
 
-// xử lý yêu cầu
+// Đọc 1 request, xử lý xong là đóng kết nối (non-persistent)
 void HttpSession::handleRequest()
 {
     try
     {
         char lineBuf[SERVER_CMD_BUF_LEN];
 
-        // nhận và đọc request line
+        // 1) nhận và đọc request line
         int r = slave.recvLine(lineBuf, sizeof(lineBuf));
-
-        if (r <= 0) { // nếu k nhận được thì đóng kêt nối
+        if (r <= 0)
+        {
             slave.close();
             return;
         }
 
         string reqLine(lineBuf);
-
         if (!parseRequestLine(reqLine))
         {
             vector<char> body;
@@ -41,16 +78,16 @@ void HttpSession::handleRequest()
             return;
         }
 
-        // đọc đến dòng trống sau header
+        // 2) đọc và bỏ qua headers cho tới dòng trống
         while (true)
         {
             r = slave.recvLine(lineBuf, sizeof(lineBuf));
             if (r <= 0) break;
             string h(lineBuf);
-            if (h == "\r\n") break; // dòng trống kết thúc header
+            if (h == "\r\n") break; // kết thúc header
         }
 
-        // kiểm tra path tránh path transversal
+        // 3) kiểm tra path độc hại
         if (isBadPath(uri))
         {
             vector<char> body;
@@ -61,43 +98,44 @@ void HttpSession::handleRequest()
             return;
         }
 
-        // xử lý theo các method khác nhau
-        if (method == "GET") doGET();
-        else if (method == "HEAD") doHEAD();
-        else doUnsupported();
+        // 4) xử lý theo method
+        if (method == "GET")
+            doGET();
+        else if (method == "HEAD")
+            doHEAD();
+        else
+            doUnsupported();
 
+        // 5) non-persistent: xử lý xong là đóng kết nối
         slave.close();
     }
     catch (...)
     {
-        try
-        {
-            slave.close();
-        } catch (...) {}
+        try { slave.close(); } catch (...) {}
     }
 }
 
 bool HttpSession::parseRequestLine(const string& line)
 {
-    // VD: METHOD URI HTTP/1.0\r\n
+    // line dạng: METHOD URI HTTP/1.0\r\n
     string clean = line;
 
-    // xóa \r\n ở cuối dòng
-    if (clean.size() >= 2 && clean.substr(clean.size()-2) == "\r\n")
-        clean = clean.substr(0, clean.size()-2);
+    // bỏ \r\n ở cuối nếu có
+    if (clean.size() >= 2 && clean.substr(clean.size() - 2) == "\r\n")
+        clean = clean.substr(0, clean.size() - 2);
 
-    // tách 3 phần
     stringstream ss(clean);
     ss >> method >> uri >> version;
 
     if (method.empty() || uri.empty() || version.empty())
         return false;
 
-    // chuyển method sang viết hoa
-    for (char& c : method) c = toupper(c);
+    // chuẩn hóa method về chữ hoa
+    for (char& c : method) c = (char)toupper(c);
 
-    // nếu client gửi "/" thì mặc định index.html
-    if (uri == "/") uri = "/index.html";
+    // nếu chỉ "/" thì mặc định index.html
+    if (uri == "/")
+        uri = "/index.html";
 
     return true;
 }
@@ -106,7 +144,7 @@ void HttpSession::doGET()
 {
     string path = buildFullPath(uri);
 
-    // check extension
+    // kiểm tra extension hợp lệ
     if (!isAllowedExtension(path))
     {
         vector<char> body;
@@ -116,7 +154,6 @@ void HttpSession::doGET()
         return;
     }
 
-    // đọc file
     vector<char> data;
     if (!readFileBinary(path, data))
     {
@@ -127,13 +164,12 @@ void HttpSession::doGET()
         return;
     }
 
-    // set header theo file và độ dài file
     string ext = getExtension(path);
     string ctype = getContentType(ext);
     sendResponse(200, "OK", ctype, &data, (long)data.size());
 }
 
-void HttpSession::doHEAD() // k gửi body
+void HttpSession::doHEAD()
 {
     string path = buildFullPath(uri);
 
@@ -153,7 +189,8 @@ void HttpSession::doHEAD() // k gửi body
     string ext = getExtension(path);
     string ctype = getContentType(ext);
 
-    sendResponse(200, "OK", ctype, nullptr, fsize); // k gửi body
+    // HEAD: chỉ header, không body
+    sendResponse(200, "OK", ctype, nullptr, fsize);
 }
 
 void HttpSession::doUnsupported()
@@ -169,14 +206,14 @@ void HttpSession::doUnknown(string[], int)
     doUnsupported();
 }
 
-// ---- helpers ----
+// ===== helpers =====
 
 bool HttpSession::isBadPath(const string& u)
 {
-    // filter 1 số ký tự gây path transversal
+    // chặn ../, \, : để tránh traversal/đường dẫn bất thường
     if (u.find("..") != string::npos) return true;
     if (u.find("\\") != string::npos) return true;
-    if (u.find(":") != string::npos) return true; // tránh scheme lạ
+    if (u.find(":") != string::npos) return true;
     return false;
 }
 
@@ -188,13 +225,13 @@ string HttpSession::buildFullPath(const string& u)
     if (!rel.empty() && rel[0] == '/')
         rel = rel.substr(1);
 
-    // ghép root + "/" + uri
     if (!root.empty() && (root.back() == '/' || root.back() == '\\'))
         return root + rel;
+
     return root + "/" + rel;
 }
 
-string HttpSession::getExtension(const string& path) // lấy extention của file
+string HttpSession::getExtension(const string& path)
 {
     size_t p = path.find_last_of('.');
     if (p == string::npos) return "";
@@ -219,20 +256,13 @@ bool HttpSession::isAllowedExtension(const string& path)
 
 string HttpSession::getContentType(const string& ext)
 {
-    if (ext == "html") return "text/html";
-
+    if (ext == "html" || ext == "htm") return "text/html";
     if (ext == "txt") return "text/plain";
-
     if (ext == "css") return "text/css";
-
     if (ext == "js") return "application/javascript";
-
     if (ext == "jpg" || ext == "jpeg") return "image/jpeg";
-
     if (ext == "png") return "image/png";
-
     if (ext == "gif") return "image/gif";
-
     return "application/octet-stream";
 }
 
@@ -245,7 +275,11 @@ bool HttpSession::readFileBinary(const string& path, vector<char>& data)
     long sz = (long)fin.tellg();
     fin.seekg(0, ios::beg);
 
-    if (sz < 0) { fin.close(); return false; }
+    if (sz < 0)
+    {
+        fin.close();
+        return false;
+    }
 
     data.resize(sz);
     if (sz > 0)
@@ -283,15 +317,25 @@ void HttpSession::sendResponse(int code, const string& reason,
     // status line + headers
     stringstream ss;
     ss << "HTTP/1.0 " << code << " " << reason << "\r\n";
+    ss << "Server: SimpleCppHttpServer\r\n";
+    ss << "Connection: close\r\n";
     ss << "Content-Type: " << contentType << "\r\n";
-    ss << "Content-Length: " << contentLen << "\r\n";
-    ss << "Connection: close\r\n\r\n";
+    ss << "Content-Length: " << contentLen << "\r\n\r\n";
 
     string header = ss.str();
     sendAll(header.c_str(), (int)header.size());
 
-    // body nếu có
+    // body nếu có (GET hoặc lỗi)
     if (body != nullptr && !body->empty())
         sendAll(&(*body)[0], (int)body->size());
-}
 
+    // ghi log access sau khi gửi response
+    string ip = "-";
+    try
+    {
+        ip = slave.getRemoteAddress();
+    }
+    catch (...) {}
+
+    logAccess(ip, method, uri, code, contentLen);
+}

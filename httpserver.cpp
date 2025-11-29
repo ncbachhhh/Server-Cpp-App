@@ -1,11 +1,53 @@
 #include "httpserver.h"
 #include "httpsession.h"
-#include <iostream>
 
-HttpServer::HttpServer():TCPServer(0)     // set tạm port là 0, load config xong thì set lại
+#include <iostream>
+#include <fstream>
+#include <sstream>
+#include <ctime>
+#include <iomanip>
+
+// ======================
+// Helper: lấy thời gian
+// ======================
+static string currentDateTime()
+{
+    time_t now = time(nullptr);
+    tm* lt = localtime(&now);
+    stringstream ss;
+    ss << put_time(lt, "%Y-%m-%d %H:%M:%S");
+    return ss.str();
+}
+
+// ======================
+// Helper: ghi log khi có kết nối mới
+// ======================
+static void logConnection(TcpSocket& sock)
+{
+    ofstream log("server.log", ios::app);    // ghi thêm vào file log
+    if (!log.is_open()) return;
+
+    string ip = "-";
+    unsigned short port = 0;
+
+    try
+    {
+        ip = sock.getRemoteAddress();
+        port = sock.getRemotePort();
+    }
+    catch (...) {}
+
+    log << "[" << currentDateTime() << "] "
+        << "NEW CONNECTION from " << ip << ":" << port << "\n";
+}
+
+// ======================
+// HttpServer
+// ======================
+HttpServer::HttpServer() : TCPServer(0)
 {
     httpConf = new HttpServerConfig();
-    this->conf = httpConf;
+    this->conf = httpConf;  // gán vào config của TCPServer
 
     if (loadConfig())
     {
@@ -25,24 +67,31 @@ HttpServer::~HttpServer()
         delete httpConf;
 }
 
-// Đọc file http.conf
 bool HttpServer::loadConfig()
 {
     return httpConf->loadConfig("http.conf");
 }
 
-// Mỗi slave socket tạo 1 phiên làm việc
+// =============================================
+// Mỗi slave socket -> tạo 1 phiên HttpSession
+// =============================================
 void HttpServer::startNewSession(TcpSocket slave)
 {
-    std::cout << "New connection accepted from " << slave.getRemoteAddress() << ":" << slave.getRemotePort() << endl;
+    // Ghi log kết nối và in ra màn hình
+    logConnection(slave);
+
+    std::cout << "New connection accepted from "
+              << slave.getRemoteAddress()
+              << ":" << slave.getRemotePort()
+              << std::endl;
 
     try
     {
-        HttpSession session(slave, httpConf); // tạo session mới
-        session.handleRequest(); // xử lý yêu cầu
+        HttpSession session(slave, httpConf);   // tạo phiên mới
+        session.handleRequest();                // xử lý request HTTP (GET/HEAD)
     }
     catch (...)
     {
-        std::cerr << "Error when closing slave socket\n";
+        std::cerr << "Error while processing session\n";
     }
 }
