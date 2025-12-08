@@ -20,7 +20,7 @@ static string currentDateTime()
 // Lấy log khi có kết nối
 static void logConnection(TcpSocket& sock)
 {
-    ofstream log("server.log", ios::app);    // ghi thêm vào file log
+    ofstream log("logs/server.log", ios::app);    // ghi thêm vào file log
     if (!log.is_open()) return;
 
     string ip = "-";

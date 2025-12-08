@@ -25,7 +25,7 @@ static void logAccess(const string& ip,
                       int code,
                       long len)
 {
-    ofstream log("access.log", ios::app);
+    ofstream log("logs/access.log", ios::app);
     if (!log.is_open()) return;
 
     log << "[" << currentDateTime() << "] "
