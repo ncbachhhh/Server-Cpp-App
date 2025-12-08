@@ -8,9 +8,7 @@
 
 using namespace std;
 
-// ======================
-// Helper: lấy thời gian
-// ======================
+// lấy thời gian
 static string currentDateTime()
 {
     time_t now = time(nullptr);
@@ -20,10 +18,7 @@ static string currentDateTime()
     return ss.str();
 }
 
-// ======================
-// Helper: ghi access log
-// ======================
-// Format: [time] ip "METHOD URI HTTP/1.0" code length
+// ghi access log
 static void logAccess(const string& ip,
                       const string& method,
                       const string& uri,
@@ -38,10 +33,6 @@ static void logAccess(const string& ip,
         << code << " " << len << "\n";
 }
 
-// ======================
-// HttpSession
-// ======================
-
 HttpSession::HttpSession(const TcpSocket& slave, HttpServerConfig* conf)
     : Session(slave, conf)
 {
@@ -52,14 +43,14 @@ HttpSession::~HttpSession()
 {
 }
 
-// Đọc 1 request, xử lý xong là đóng kết nối (non-persistent)
+// Đọc 1 request, xử lý xong là đóng kết nối
 void HttpSession::handleRequest()
 {
     try
     {
         char lineBuf[SERVER_CMD_BUF_LEN];
 
-        // 1) nhận và đọc request line
+        // nhận và đọc request line
         int r = slave.recvLine(lineBuf, sizeof(lineBuf));
         if (r <= 0)
         {
@@ -78,7 +69,7 @@ void HttpSession::handleRequest()
             return;
         }
 
-        // 2) đọc và bỏ qua headers cho tới dòng trống
+        // đọc và bỏ qua headers cho tới dòng trống
         while (true)
         {
             r = slave.recvLine(lineBuf, sizeof(lineBuf));
@@ -87,7 +78,7 @@ void HttpSession::handleRequest()
             if (h == "\r\n") break; // kết thúc header
         }
 
-        // 3) kiểm tra path độc hại
+        // kiểm tra path tránh injection
         if (isBadPath(uri))
         {
             vector<char> body;
@@ -98,7 +89,7 @@ void HttpSession::handleRequest()
             return;
         }
 
-        // 4) xử lý theo method
+        // xử lý theo method
         if (method == "GET")
             doGET();
         else if (method == "HEAD")
@@ -106,7 +97,7 @@ void HttpSession::handleRequest()
         else
             doUnsupported();
 
-        // 5) non-persistent: xử lý xong là đóng kết nối
+        // xử lý xong là đóng kết nối
         slave.close();
     }
     catch (...)
@@ -130,7 +121,7 @@ bool HttpSession::parseRequestLine(const string& line)
     if (method.empty() || uri.empty() || version.empty())
         return false;
 
-    // chuẩn hóa method về chữ hoa
+    // chuyển method về chữ hoa
     for (char& c : method) c = (char)toupper(c);
 
     // nếu chỉ "/" thì mặc định index.html
@@ -206,7 +197,6 @@ void HttpSession::doUnknown(string[], int)
     doUnsupported();
 }
 
-// ===== helpers =====
 
 bool HttpSession::isBadPath(const string& u)
 {
@@ -299,6 +289,7 @@ long HttpSession::getFileSize(const string& path)
     return sz;
 }
 
+// gửi kết quả toàn bộ
 void HttpSession::sendAll(const char* data, int len)
 {
     int sent = 0;

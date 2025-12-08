@@ -7,9 +7,7 @@
 #include <ctime>
 #include <iomanip>
 
-// ======================
-// Helper: lấy thời gian
-// ======================
+// Lấy thời gian
 static string currentDateTime()
 {
     time_t now = time(nullptr);
@@ -19,9 +17,7 @@ static string currentDateTime()
     return ss.str();
 }
 
-// ======================
-// Helper: ghi log khi có kết nối mới
-// ======================
+// Lấy log khi có kết nối
 static void logConnection(TcpSocket& sock)
 {
     ofstream log("server.log", ios::app);    // ghi thêm vào file log
@@ -41,9 +37,7 @@ static void logConnection(TcpSocket& sock)
         << "NEW CONNECTION from " << ip << ":" << port << "\n";
 }
 
-// ======================
-// HttpServer
-// ======================
+
 HttpServer::HttpServer() : TCPServer(0)
 {
     httpConf = new HttpServerConfig();
@@ -72,9 +66,6 @@ bool HttpServer::loadConfig()
     return httpConf->loadConfig("http.conf");
 }
 
-// =============================================
-// Mỗi slave socket -> tạo 1 phiên HttpSession
-// =============================================
 void HttpServer::startNewSession(TcpSocket slave)
 {
     // Ghi log kết nối và in ra màn hình
@@ -88,7 +79,7 @@ void HttpServer::startNewSession(TcpSocket slave)
     try
     {
         HttpSession session(slave, httpConf);   // tạo phiên mới
-        session.handleRequest();                // xử lý request HTTP (GET/HEAD)
+        session.handleRequest();                // xử lý request
     }
     catch (...)
     {
