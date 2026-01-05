@@ -133,3 +133,107 @@
 	<ctime>
 	<iomanip>
 
+1764408888 source:d:\webapp\ltudm\server-cpp-app-main\cli.cpp
+	<iostream>
+	<sstream>
+	"cli.h"
+
+1764408888 d:\webapp\ltudm\server-cpp-app-main\cli.h
+	<string>
+
+1764408888 source:d:\webapp\ltudm\server-cpp-app-main\httpservercli.cpp
+	"httpservercli.h"
+	<iostream>
+
+1764408888 d:\webapp\ltudm\server-cpp-app-main\httpservercli.h
+	"cli.h"
+	"httpserver.h"
+
+1764408888 d:\webapp\ltudm\server-cpp-app-main\httpserver.h
+	"tcpserver.h"
+	"httpserverconfig.h"
+	"tcpsocket.h"
+
+1764408888 d:\webapp\ltudm\server-cpp-app-main\tcpserver.h
+	"tcpserversocket.h"
+	"session.h"
+	<cstdint>
+
+1764408888 d:\webapp\ltudm\server-cpp-app-main\tcpserversocket.h
+	"tcpsocket.h"
+
+1764408888 d:\webapp\ltudm\server-cpp-app-main\tcpsocket.h
+	"socket.h"
+
+1764408888 d:\webapp\ltudm\server-cpp-app-main\socket.h
+	<string>
+	<exception>
+
+1764408888 d:\webapp\ltudm\server-cpp-app-main\session.h
+	"tcpsocket.h"
+	"serverconfig.h"
+
+1764408888 d:\webapp\ltudm\server-cpp-app-main\serverconfig.h
+	<string>
+	<unordered_map>
+
+1764408888 d:\webapp\ltudm\server-cpp-app-main\httpserverconfig.h
+	"serverconfig.h"
+	<string>
+	<vector>
+
+1764408888 source:d:\webapp\ltudm\server-cpp-app-main\main.cpp
+	"httpservercli.h"
+
+1764408888 source:d:\webapp\ltudm\server-cpp-app-main\serverconfig.cpp
+	<cstring>
+	<iostream>
+	"serverconfig.h"
+
+1764408888 source:d:\webapp\ltudm\server-cpp-app-main\session.cpp
+	"session.h"
+
+1764408888 source:d:\webapp\ltudm\server-cpp-app-main\socket.cpp
+	"socket.h"
+	<winsock2.h>
+	<ws2tcpip.h>
+	<sys/types.h>
+	<sys/socket.h>
+	<netdb.h>
+	<arpa/inet.h>
+	<unistd.h>
+	<netinet/in.h>
+	<cstring>
+	<errno.h>
+
+1764408888 source:d:\webapp\ltudm\server-cpp-app-main\tcpserver.cpp
+	<thread>
+	<thread>
+	<iostream>
+	"tcpserver.h"
+
+1764408888 source:d:\webapp\ltudm\server-cpp-app-main\tcpserversocket.cpp
+	<winsock2.h>
+	<ws2tcpip.h>
+	<sys/types.h>
+	<sys/socket.h>
+	<netdb.h>
+	<arpa/inet.h>
+	<unistd.h>
+	<netinet/in.h>
+	<errno.h>
+	"tcpserversocket.h"
+
+1764408888 source:d:\webapp\ltudm\server-cpp-app-main\tcpsocket.cpp
+	<winsock2.h>
+	<ws2tcpip.h>
+	<sys/types.h>
+	<sys/socket.h>
+	<netdb.h>
+	<arpa/inet.h>
+	<unistd.h>
+	<netinet/in.h>
+	<cstring>
+	<errno.h>
+	"tcpsocket.h"
+

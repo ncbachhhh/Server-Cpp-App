@@ -13,7 +13,7 @@ static string currentDateTime()
 {
     time_t now = time(nullptr);                     // Lấy thời gian hiện tại
     tm* lt = localtime(&now);                       // Chuyển sang local time
-    stringstream ss;                               
+    stringstream ss;
     ss << put_time(lt, "%Y-%m-%d %H:%M:%S");        // Format: YYYY-MM-DD HH:MM:SS
     return ss.str();                                // Trả về chuỗi thời gian
 }
@@ -25,7 +25,7 @@ static void logAccess(const string& ip,
                       int code,
                       long len)
 {
-    ofstream log("logs/access.log", ios::app);     // Mở file log ở chế độ append
+    ofstream log("./logs/access.log", ios::app);     // Mở file log ở chế độ append
     if (!log.is_open()) return;                     // Nếu không mở được thì thoát
 
     // Ghi log theo format: [thời gian] IP "METHOD URI HTTP/1.0" status_code content_length

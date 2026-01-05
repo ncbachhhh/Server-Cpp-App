@@ -12,7 +12,7 @@ static string currentDateTime()
 {
     time_t now = time(nullptr);                     // Lấy thời gian hiện tại (epoch)
     tm* lt = localtime(&now);                       // Chuyển sang local time
-    stringstream ss;                            
+    stringstream ss;
     ss << put_time(lt, "%Y-%m-%d %H:%M:%S");       // Format: YYYY-MM-DD HH:MM:SS
     return ss.str();                                // Trả về chuỗi thời gian
 }
@@ -20,7 +20,7 @@ static string currentDateTime()
 // Lấy log khi có kết nối
 static void logConnection(TcpSocket& sock)
 {
-    ofstream log("logs/server.log", ios::app);     // Mở file log ở chế độ append
+    ofstream log("./logs/server.log", ios::app);     // Mở file log ở chế độ append
     if (!log.is_open()) return;                     // Nếu không mở được thì thoát
 
     string ip = "-";                                // IP mặc định nếu không lấy được
@@ -41,7 +41,7 @@ static void logConnection(TcpSocket& sock)
 
 HttpServer::HttpServer() : TCPServer(0)
 {
-    httpConf = new HttpServerConfig();              // Tạo đối tượng config cho HTTP server 
+    httpConf = new HttpServerConfig();              // Tạo đối tượng config cho HTTP server
     this->conf = httpConf;                          // Gán vào config của TCPServer (class cha)
 
     if (loadConfig())                               // Thử load file config
