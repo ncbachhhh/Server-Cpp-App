@@ -31,7 +31,7 @@ void HttpServerCLI::doStart(string cmd_argv[], int cmd_argc)
     }
 
     if (server->start())
-        cout << "HTTP Server started\n";
+        cout << "HTTP Server started on port " << server->getPort() << "\n";
     else
         cout << "HTTP Server failed to start\n";
 }

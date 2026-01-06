@@ -15,6 +15,7 @@ public:
     virtual ~HttpServer();
 
     bool loadConfig();            // đọc http.conf
+    unsigned short getPort() const { return port; } // Lấy port từ config
 
 protected:
     // override từ TCPServer

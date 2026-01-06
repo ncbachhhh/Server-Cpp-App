@@ -149,7 +149,7 @@
 	"cli.h"
 	"httpserver.h"
 
-1764408888 d:\webapp\ltudm\server-cpp-app-main\httpserver.h
+1767671747 d:\webapp\ltudm\server-cpp-app-main\httpserver.h
 	"tcpserver.h"
 	"httpserverconfig.h"
 	"tcpsocket.h"
@@ -236,4 +236,34 @@
 	<cstring>
 	<errno.h>
 	"tcpsocket.h"
+
+1767618160 source:d:\webapp\ltudm\server-cpp-app-main\httpserver.cpp
+	"httpserver.h"
+	"httpsession.h"
+	<iostream>
+	<fstream>
+	<sstream>
+	<ctime>
+	<iomanip>
+
+1764408888 d:\webapp\ltudm\server-cpp-app-main\httpsession.h
+	"session.h"
+	"httpserverconfig.h"
+	<string>
+	<vector>
+
+1766580173 source:d:\webapp\ltudm\server-cpp-app-main\httpserverconfig.cpp
+	"httpserverconfig.h"
+	<fstream>
+	<sstream>
+	<iostream>
+
+1767618156 source:d:\webapp\ltudm\server-cpp-app-main\httpsession.cpp
+	"httpsession.h"
+	<sstream>
+	<fstream>
+	<iostream>
+	<algorithm>
+	<ctime>
+	<iomanip>
 
